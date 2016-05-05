@@ -1,0 +1,47 @@
+<?php
+
+function hello_init() {
+  # drupal_set_message("Hellos users!");
+}
+
+
+function hello_menu() {
+
+  $items = array();
+  $items['hellopage'] = array(
+    'title' => 'My Hello Page',
+    'description' => 'Hellos users',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('hello_showHelloForm'),
+    'access callback' => 'user_access',
+    'access arguments' => array('access_content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+function hello_showHelloForm() {
+
+  $form = array();
+  $form['name'] = array(
+    '#type' => 'textfield',
+      '#title' => 'Enter your name'
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+      '#value' => 'Submit'
+  );
+
+  $form['#submit'][] = 'hello_showHelloForm_submit';
+
+  global $user;
+  $newToken = drupal_get_token("my secret value x " . $user->uid);
+  drupal_add_js("var myToken = '$newToken'", "inline");
+
+  return $form;
+}
+
+function hello_showHelloForm_submit($form, &$form_state) {
+  drupal_set_message("Hello " . $form_state['values']['name']);
+}
