@@ -1,0 +1,4 @@
+package = Trails package
+title = Trails
+description = dummy module
+core = 7.x
